@@ -3,6 +3,8 @@ package com.ijse.posbackend.controller;
 import com.ijse.posbackend.entity.Product;
 import com.ijse.posbackend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,23 +16,39 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/products")
-    public List<Product> getAllProducts(){
-        return productService.getAllProducts();
+    public ResponseEntity<List<Product>> getAllProducts(){
+        return ResponseEntity.status(HttpStatus.OK).body(productService.getAllProducts());
+
     }
 
     @PostMapping("/products")
-    public Product createProduct(@RequestBody Product product){
+    public ResponseEntity<?> createProduct(@RequestBody Product product){
 
-        return productService.createProduct(product);
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(productService.createProduct(product));
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to create the product");
+        }
     }
 
     @GetMapping("/products/{id}")
-    public Product getProductById(@PathVariable Long id){
-        return productService.getProductById(id);
+    public ResponseEntity<?> getProductById(@PathVariable Long id){
+        Product product = productService.getProductById(id);
+        if(product != null){
+            return ResponseEntity.status(HttpStatus.OK).body(product);
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product Not Found");
+        }
+
     }
 
     @PutMapping("/products/{id}")
-    public Product updateProduct(@PathVariable Long id, @RequestBody Product product){
-        return productService.updateProduct(id,product);
+    public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody Product product){
+        try{
+            return ResponseEntity.status(HttpStatus.OK).body(productService.updateProduct(id,product));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to update the product");
+        }
+
     }
 }

@@ -3,6 +3,8 @@ package com.ijse.posbackend.controller;
 import com.ijse.posbackend.entity.Category;
 import com.ijse.posbackend.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,22 +16,39 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping("/categories")
-    public List<Category> getAllCategories(){
-        return categoryService.getAllCategories();
+    public ResponseEntity<List<Category>> getAllCategories(){
+        return ResponseEntity.status(HttpStatus.OK).body(categoryService.getAllCategories());
     }
 
     @PostMapping("/categories")
-    public Category createCategory(@RequestBody Category category){
-        return categoryService.createCategory(category);
+    public ResponseEntity<?>  createCategory(@RequestBody Category category){
+
+        try{
+            return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.createCategory(category));
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to Create the Category");
+        }
     }
 
     @GetMapping("/categories/{id}")
-    public Category getCategoryById(@PathVariable Long id){
-        return categoryService.findCategoryById(id);
+    public ResponseEntity<?> getCategoryById(@PathVariable Long id){
+        Category category = categoryService.findCategoryById(id);
+        if(category != null){
+            return ResponseEntity.status(HttpStatus.OK).body(category);
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Category Not Found");
+        }
+
     }
 
     @PutMapping("/categories/{id}")
-    public Category updateCategory(@PathVariable Long id, @RequestBody Category category){
-        return categoryService.updateCategory(id,category);
+    public ResponseEntity<?> updateCategory(@PathVariable Long id, @RequestBody Category category){
+
+        try{
+            return ResponseEntity.status(HttpStatus.OK).body(categoryService.updateCategory(id,category));
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to Update the category");
+        }
+
     }
 }
