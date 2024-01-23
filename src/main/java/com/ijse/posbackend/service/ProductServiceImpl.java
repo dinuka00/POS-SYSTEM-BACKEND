@@ -1,6 +1,9 @@
 package com.ijse.posbackend.service;
 
+import com.ijse.posbackend.dto.ProductDTO;
+import com.ijse.posbackend.entity.Category;
 import com.ijse.posbackend.entity.Product;
+import com.ijse.posbackend.repository.CategoryRepository;
 import com.ijse.posbackend.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,9 @@ public class ProductServiceImpl implements ProductService{
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Override
     public List<Product> getAllProducts(){
         return  productRepository.findAll();
@@ -24,8 +30,20 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public Product createProduct(Product product){
+    public Product createProduct(ProductDTO productDTO){
+        Category category = categoryRepository.findById(productDTO.getCategoryId()).orElse(null);
+
+        if(category != null){
+            Product product = new Product();
+            product.setName(productDTO.getName());
+            product.setPrice(productDTO.getPrice());
+            product.setQty(productDTO.getQty());
+            product.setCategory(category);
         return productRepository.save(product);
+        }else {
+            return null;
+        }
+
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.ijse.posbackend.controller;
 
+import com.ijse.posbackend.dto.ProductDTO;
 import com.ijse.posbackend.entity.Product;
 import com.ijse.posbackend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +23,10 @@ public class ProductController {
     }
 
     @PostMapping("/products")
-    public ResponseEntity<?> createProduct(@RequestBody Product product){
+    public ResponseEntity<?> createProduct(@RequestBody ProductDTO productDTO){
 
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(productService.createProduct(product));
+            return ResponseEntity.status(HttpStatus.CREATED).body(productService.createProduct(productDTO));
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to create the product");
         }

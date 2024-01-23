@@ -1,5 +1,6 @@
 package com.ijse.posbackend.service;
 
+import com.ijse.posbackend.dto.ProductDTO;
 import com.ijse.posbackend.entity.Product;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,7 @@ public interface ProductService {
 
     Product getProductById(Long id);
 
-    Product createProduct(Product product);
+    Product createProduct(ProductDTO productDTO);
 
     Product updateProduct(Long id, Product product);
 }
