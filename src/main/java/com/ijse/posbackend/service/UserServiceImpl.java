@@ -1,5 +1,6 @@
 package com.ijse.posbackend.service;
 
+import com.ijse.posbackend.dto.UserPwDTO;
 import com.ijse.posbackend.entity.User;
 import com.ijse.posbackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,18 @@ public class UserServiceImpl implements UserService{
     @Override
     public User getUserById(Long id){
         return userRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public User changUserPassword(Long id, UserPwDTO userPwDTO){
+         User user = userRepository.findById(id).orElse(null);
+
+         if(user != null){
+             user.setPassword(userPwDTO.getPassword());
+             return userRepository.save(user);
+         }else {
+             return null;
+         }
     }
 
 
