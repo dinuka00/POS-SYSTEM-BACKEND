@@ -61,4 +61,16 @@ public class ProductServiceImpl implements ProductService{
             return null;
         }
     }
+
+    @Override
+    public List<Product> getProductsByCategory(Long id){
+        Category category =  categoryRepository.findById(id).orElse(null);
+
+        if(category != null){
+            return productRepository.findProductsByCategory(category);
+        }else {
+            return null;
+        }
+    }
+
 }
