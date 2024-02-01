@@ -47,7 +47,7 @@ public class ProductController {
     @PutMapping("/products/{id}")
     public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody Product product){
         try{
-            return ResponseEntity.status(HttpStatus.OK).body(productService.updateProduct(id,product));
+            return ResponseEntity.status(HttpStatus.OK).body(productService.updateProduct(id, product));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to update the product");
         }
