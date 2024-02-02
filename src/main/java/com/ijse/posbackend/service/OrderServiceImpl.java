@@ -49,7 +49,7 @@ public class OrderServiceImpl implements OrderService{
                 productSet.add(product);
                 order.setTotal(order.getTotal()+product.getPrice());
 
-                
+
             }
         }
         Double tax = (order.getTotal()/100)*15;
